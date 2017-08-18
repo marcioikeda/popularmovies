@@ -1,7 +1,5 @@
 package br.com.marcioikeda.popularmovies;
 
-import android.content.Context;
-import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+
+import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
 
 /**
  * Created by marcio.ikeda on 17/08/2017.
@@ -68,6 +68,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         public MovieViewHolder(View itemView) {
             super(itemView);
             movieView = (ImageView) itemView.findViewById(R.id.iv_movie_post);
+            movieView.setOnClickListener(this);
         }
 
         @Override
