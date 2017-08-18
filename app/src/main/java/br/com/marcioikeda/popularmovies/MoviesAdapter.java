@@ -1,7 +1,6 @@
 package br.com.marcioikeda.popularmovies;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +8,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import br.com.marcioikeda.popularmovies.model.Movie;
 import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
 
 /**
@@ -21,7 +21,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     private final ListItemClickListener mOnClickListener;
 
-    private String[] mMoviesData;
+    private Movie[] mMoviesData;
 
     public interface ListItemClickListener {
         void onListItemClick(int position);
@@ -31,7 +31,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         mOnClickListener = listener;
     }
 
-    public void setMoviesData(String[] data) {
+    public void setMoviesData(Movie[] data) {
         mMoviesData = data;
         notifyDataSetChanged();
     }
@@ -50,9 +50,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
-        Log.d(TAG, MovieAPIUtil.buildImageUri(mMoviesData[position]));
         Picasso.with(holder.movieView.getContext())
-                .load(MovieAPIUtil.buildImageUri(mMoviesData[position])).into(holder.movieView);
+                .load(MovieAPIUtil.buildImageUri(mMoviesData[position].getPoster_path().substring(1)))
+                .into(holder.movieView);
     }
 
     @Override

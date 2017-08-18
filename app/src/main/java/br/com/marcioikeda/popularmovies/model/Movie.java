@@ -1,10 +1,13 @@
 package br.com.marcioikeda.popularmovies.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by marcio.ikeda on 17/08/2017.
  */
 
-public class Movie {
+public class Movie implements Parcelable{
     private String vote_average;
 
     private String backdrop_path;
@@ -177,5 +180,15 @@ public class Movie {
     public String toString()
     {
         return "ClassPojo [vote_average = "+vote_average+", backdrop_path = "+backdrop_path+", adult = "+adult+", id = "+id+", title = "+title+", overview = "+overview+", original_language = "+original_language+", genre_ids = "+genre_ids+", release_date = "+release_date+", original_title = "+original_title+", vote_count = "+vote_count+", poster_path = "+poster_path+", video = "+video+", popularity = "+popularity+"]";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

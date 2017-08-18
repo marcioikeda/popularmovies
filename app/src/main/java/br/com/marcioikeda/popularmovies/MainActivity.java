@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.URL;
 
+import br.com.marcioikeda.popularmovies.model.Movie;
 import br.com.marcioikeda.popularmovies.model.MovieList;
 import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
 
@@ -21,7 +22,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     private static final String TAG = MainActivity.class.getSimpleName();
 
     RecyclerView mRecyclerView;
-    String[] movieData;
+    MoviesAdapter mAdapter;
+    Movie[] mMovieData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +36,15 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        MoviesAdapter adapter = new MoviesAdapter(this);
+        mAdapter = new MoviesAdapter(this);
 
-        movieData = new String[]{"q0R4crx2SehcEEQEkYObktdeFy.jpg", "tWqifoYuwLETmmasnGHO7xBjEtt.jpg"};
+        //mMovieData = new String[]{"q0R4crx2SehcEEQEkYObktdeFy.jpg", "tWqifoYuwLETmmasnGHO7xBjEtt.jpg"};
+        
 
-        adapter.setMoviesData(movieData);
-        mRecyclerView.setAdapter(adapter);
+        //adapter.setMoviesData(mMovieData);
+        mRecyclerView.setAdapter(mAdapter);
+
+        loadPopularMovies();
 
     }
 
@@ -49,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
 
     @Override
     public void onListItemClick(int position) {
-        Toast.makeText(this, String.valueOf(position) + " - " + movieData[position], Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, String.valueOf(position) + " - " + mMovieData[position], Toast.LENGTH_SHORT).show();
     }
 
     public class GetMoviesTask extends AsyncTask<URL, Void, MovieList> {
@@ -80,7 +85,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         @Override
         protected void onPostExecute(MovieList list) {
             if (list != null) {
-
+                mMovieData = list.getResults();
+                mAdapter.setMoviesData(mMovieData);
+            } else {
+                Toast.makeText(MainActivity.this, "Error fetching movies", Toast.LENGTH_LONG).show();
             }
         }
     }
