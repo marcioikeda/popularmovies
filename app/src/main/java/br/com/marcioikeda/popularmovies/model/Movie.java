@@ -182,6 +182,22 @@ public class Movie implements Parcelable{
         return "ClassPojo [vote_average = "+vote_average+", backdrop_path = "+backdrop_path+", adult = "+adult+", id = "+id+", title = "+title+", overview = "+overview+", original_language = "+original_language+", genre_ids = "+genre_ids+", release_date = "+release_date+", original_title = "+original_title+", vote_count = "+vote_count+", poster_path = "+poster_path+", video = "+video+", popularity = "+popularity+"]";
     }
 
+    protected Movie(Parcel in) {
+        vote_average = in.readString();
+        backdrop_path = in.readString();
+        adult = in.readString();
+        id = in.readString();
+        title = in.readString();
+        overview = in.readString();
+        original_language = in.readString();
+        release_date = in.readString();
+        original_title = in.readString();
+        vote_count = in.readString();
+        poster_path = in.readString();
+        video = in.readString();
+        popularity = in.readString();
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -189,6 +205,31 @@ public class Movie implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(vote_average);
+        dest.writeString(backdrop_path);
+        dest.writeString(adult);
+        dest.writeString(id);
+        dest.writeString(title);
+        dest.writeString(overview);
+        dest.writeString(original_language);
+        dest.writeString(release_date);
+        dest.writeString(original_title);
+        dest.writeString(vote_count);
+        dest.writeString(poster_path);
+        dest.writeString(video);
+        dest.writeString(popularity);
     }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }

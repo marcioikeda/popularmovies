@@ -1,5 +1,6 @@
 package br.com.marcioikeda.popularmovies;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,8 @@ import java.net.URL;
 import br.com.marcioikeda.popularmovies.model.Movie;
 import br.com.marcioikeda.popularmovies.model.MovieList;
 import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
+
+import static br.com.marcioikeda.popularmovies.MovieDetailActivity.KEY_EXTRA_MOVIE;
 
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.ListItemClickListener{
 
@@ -39,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         mAdapter = new MoviesAdapter(this);
 
         //mMovieData = new String[]{"q0R4crx2SehcEEQEkYObktdeFy.jpg", "tWqifoYuwLETmmasnGHO7xBjEtt.jpg"};
-        
 
         //adapter.setMoviesData(mMovieData);
         mRecyclerView.setAdapter(mAdapter);
@@ -54,7 +56,12 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
 
     @Override
     public void onListItemClick(int position) {
-        Toast.makeText(this, String.valueOf(position) + " - " + mMovieData[position], Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, String.valueOf(position) + " - " + mMovieData[position], Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        Bundle extras = new Bundle();
+        extras.putParcelable(KEY_EXTRA_MOVIE, mMovieData[position]);
+        intent.putExtras(extras);
+        startActivity(intent);
     }
 
     public class GetMoviesTask extends AsyncTask<URL, Void, MovieList> {
