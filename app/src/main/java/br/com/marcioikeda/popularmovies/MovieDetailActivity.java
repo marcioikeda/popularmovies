@@ -1,5 +1,6 @@
 package br.com.marcioikeda.popularmovies;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -11,14 +12,24 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.net.URL;
+
 import br.com.marcioikeda.popularmovies.model.Movie;
+import br.com.marcioikeda.popularmovies.model.MovieDetail;
+import br.com.marcioikeda.popularmovies.model.MovieList;
 import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
+
+import static android.R.id.list;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
     public static final String KEY_EXTRA_MOVIE = "key_extra_movie";
+
+    private MovieDetail mMovieDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,4 +66,43 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .into(movieImageView);
     }
 
+    void loadMovieIntoUI(MovieDetail movie) {
+
+    }
+
+    public class GetMovieDetailTask extends AsyncTask<URL, Void, MovieDetail> {
+
+        @Override
+        protected MovieDetail doInBackground(URL... params) {
+            if (params.length == 0) {
+                return null;
+            }
+
+            URL url = params[0];
+            String jsonString = null;
+            try {
+                jsonString = MovieAPIUtil.getResponseFromHttpUrl(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            if (jsonString != null) {
+                Gson gson = new Gson();
+                MovieDetail result = gson.fromJson(jsonString, MovieDetail.class);
+                return result;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(MovieDetail result) {
+            if (result != null) {
+                mMovieDetail = result;
+                loadMovieIntoUI(result);
+            } else {
+                Toast.makeText(MovieDetailActivity.this, "Error Fetching Movie Detail", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }
