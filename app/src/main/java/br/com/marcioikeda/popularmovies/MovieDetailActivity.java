@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -20,16 +21,14 @@ import java.net.URL;
 
 import br.com.marcioikeda.popularmovies.model.Movie;
 import br.com.marcioikeda.popularmovies.model.MovieDetail;
-import br.com.marcioikeda.popularmovies.model.MovieList;
 import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
-
-import static android.R.id.list;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
     public static final String KEY_EXTRA_MOVIE = "key_extra_movie";
 
     private MovieDetail mMovieDetail;
+    private Movie mMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,27 +46,58 @@ public class MovieDetailActivity extends AppCompatActivity {
             }
         });
 
-        //Get Movie from intent
-        Movie movie = getIntent().getExtras().getParcelable(KEY_EXTRA_MOVIE);
-        Toast.makeText(this, "Got movie: " + movie.getTitle(), Toast.LENGTH_SHORT).show();
-
         //Adjust Height
         AppBarLayout appbar = (AppBarLayout) findViewById(R.id.app_bar);
         float heightDp = getResources().getDisplayMetrics().heightPixels / 3;
         CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams)appbar.getLayoutParams();
-        lp.height = (int)heightDp*2;
+        lp.height = (int)heightDp;
         appbar.setLayoutParams(lp);
 
-        //Set UI content
-        setTitle(movie.getTitle());
-        ImageView movieImageView = (ImageView) findViewById(R.id.iv_movie_detail_post);
-        Picasso.with(this).load(MovieAPIUtil
-                .buildImageUri(movie.getPoster_path().substring(1), MovieAPIUtil.IMG_SIZE_500))
-                .into(movieImageView);
+        //Get Movie from intent
+        Movie movie = getIntent().getExtras().getParcelable(KEY_EXTRA_MOVIE);
+        if (movie != null) {
+            loadUIContent(movie);
+        }
     }
 
-    void loadMovieIntoUI(MovieDetail movie) {
+    private void loadUIContent(Movie movie) {
+        //Set UI content
+        setTitle(movie.getTitle());
+        ImageView movieTopImageView = (ImageView) findViewById(R.id.iv_movie_detail_appbar);
+        Picasso.with(this).load(MovieAPIUtil
+                .buildImageUri(movie.getBackdrop_path().substring(1), MovieAPIUtil.IMG_SIZE_500))
+                .into(movieTopImageView);
 
+        ImageView moviePostImageView = (ImageView) findViewById(R.id.iv_movie_detail_post);
+        Picasso.with(this).load(MovieAPIUtil
+                .buildImageUri(movie.getPoster_path().substring(1), MovieAPIUtil.IMG_SIZE_185))
+                .into(moviePostImageView);
+
+        TextView voteAverageTextView = (TextView) findViewById(R.id.tv_vote_average);
+        voteAverageTextView.setText(movie.getVote_average() + "/10");
+
+        TextView releaseYearTextView = (TextView) findViewById(R.id.tv_release_year);
+        releaseYearTextView.setText(movie.getRelease_date().substring(0, 4));
+
+        TextView voteCountTextView = (TextView) findViewById(R.id.tv_vote_count);
+        voteCountTextView.setText(movie.getVote_count());
+
+        TextView originalTitleTextView = (TextView) findViewById(R.id.tv_original_title);
+        originalTitleTextView.setText(movie.getOriginal_title() + "\n(original title)");
+
+        TextView overviewTextView = (TextView) findViewById(R.id.tv_overview);
+        overviewTextView.setText(movie.getOverview());
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(KEY_EXTRA_MOVIE, mMovie);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Movie movie = savedInstanceState.getParcelable(KEY_EXTRA_MOVIE);
+        loadUIContent(movie);
     }
 
     public class GetMovieDetailTask extends AsyncTask<URL, Void, MovieDetail> {
@@ -99,7 +129,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         protected void onPostExecute(MovieDetail result) {
             if (result != null) {
                 mMovieDetail = result;
-                loadMovieIntoUI(result);
             } else {
                 Toast.makeText(MovieDetailActivity.this, "Error Fetching Movie Detail", Toast.LENGTH_LONG).show();
             }
