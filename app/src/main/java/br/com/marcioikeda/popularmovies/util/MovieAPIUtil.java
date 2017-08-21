@@ -15,13 +15,13 @@ import java.util.Scanner;
 
 public class MovieAPIUtil {
 
-    public static final String BASE_URL = "http://api.themoviedb.org/3";
-    public static final String IMAGE_URL = "http://image.tmdb.org/t/p";
-    public static final String API_KEY_QUERY = "api_key";
+    private static final String BASE_URL = "http://api.themoviedb.org/3";
+    private static final String IMAGE_URL = "http://image.tmdb.org/t/p";
+    private static final String API_KEY_QUERY = "api_key";
 
-    public static final String MOVIE_PATH = "movie";
-    public static final String POPULAR_PATH = "popular";
-    public static final String TOPRATED_PATH = "top_rated";
+    private static final String MOVIE_PATH = "movie";
+    private static final String POPULAR_PATH = "popular";
+    private static final String TOPRATED_PATH = "top_rated";
 
     public static final String IMG_SIZE_185 = "w185";
     public static final String IMG_SIZE_500 = "w500";

@@ -27,12 +27,10 @@ import static br.com.marcioikeda.popularmovies.MovieDetailActivity.KEY_EXTRA_MOV
 
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.ListItemClickListener{
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-
-    RecyclerView mRecyclerView;
-    MoviesAdapter mAdapter;
-    ProgressBar mProgressBar;
-    Movie[] mMovieData;
+    private RecyclerView mRecyclerView;
+    private MoviesAdapter mAdapter;
+    private ProgressBar mProgressBar;
+    private Movie[] mMovieData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +50,15 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         loadPopularMovies();
     }
 
-    public void loadPopularMovies() {
+    private void loadPopularMovies() {
         new GetMoviesTask().execute(MovieAPIUtil.buildPopularMoviesURL());
     }
 
-    public void loadTopRatedMovies() {
+    private void loadTopRatedMovies() {
         new GetMoviesTask().execute(MovieAPIUtil.buildTopRatedMoviesURL());
     }
 
-    public void loadMoviesIntoUI(MovieList list) {
+    private void loadMoviesIntoUI(MovieList list) {
         if (list != null) {
             mMovieData = list.getResults();
             mAdapter.setMoviesData(mMovieData);
@@ -95,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         startActivity(intent);
     }
 
-    public class GetMoviesTask extends AsyncTask<URL, Void, MovieList> {
+    private class GetMoviesTask extends AsyncTask<URL, Void, MovieList> {
 
         @Override
         protected void onPreExecute() {
@@ -110,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
             }
 
             URL url = params[0];
-            String jsonString = null;
+            String jsonString;
             try {
                 jsonString = MovieAPIUtil.getResponseFromHttpUrl(url);
             } catch (IOException e) {
@@ -120,8 +118,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
 
             if (jsonString != null) {
                 Gson gson = new Gson();
-                MovieList result = gson.fromJson(jsonString, MovieList.class);
-                return result;
+                return gson.fromJson(jsonString, MovieList.class);
             }
             return null;
         }

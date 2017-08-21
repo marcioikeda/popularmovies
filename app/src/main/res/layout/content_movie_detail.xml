@@ -16,11 +16,12 @@
 
         <ImageView
             android:id="@+id/iv_movie_detail_post"
-            android:layout_width="120dp"
-            android:layout_height="180dp"
+            android:layout_width="@dimen/movie_post_width"
+            android:layout_height="@dimen/movie_post_height"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:src="@mipmap/ic_launcher"
+            android:contentDescription="@string/content_movie_post"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/tv_vote_average"
@@ -33,10 +34,9 @@
             android:id="@+id/tv_vote_average"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0.0/10.0"
+            android:text="@string/vote_average"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/tv_original_title"
-            android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="@+id/guideline"
             android:layout_marginStart="8dp" />
 
@@ -44,10 +44,9 @@
             android:id="@+id/tv_vote_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5000"
+            android:text="@string/vote_count_dummy"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/tv_vote_average"
-            android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="@+id/guideline"
             android:layout_marginStart="8dp" />
 
@@ -55,7 +54,7 @@
             android:id="@+id/tv_original_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Original Title"
+            android:text="@string/original_title"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="8dp"
@@ -72,7 +71,6 @@
             android:text="@string/large_text"
             android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@+id/iv_movie_detail_post"
-            android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginStart="8dp" />
 
@@ -89,11 +87,10 @@
             android:id="@+id/tv_release_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2016"
+            android:text="@string/release_year_dummy"
             android:layout_marginStart="8dp"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="16dp"
-            android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="@+id/guideline" />
 
     </android.support.constraint.ConstraintLayout>

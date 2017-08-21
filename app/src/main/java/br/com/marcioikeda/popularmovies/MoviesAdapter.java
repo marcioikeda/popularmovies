@@ -17,8 +17,6 @@ import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
 
-    private static final String TAG = MoviesAdapter.class.getSimpleName();
-
     private final ListItemClickListener mOnClickListener;
 
     private Movie[] mMoviesData;
@@ -43,9 +41,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         boolean shouldAttachToParentImmediately = false;
 
         View view = inflater.inflate(layoutIdForListItem, parent, shouldAttachToParentImmediately);
-        MovieViewHolder viewHolder = new MovieViewHolder(view);
-
-        return viewHolder;
+        return new MovieViewHolder(view);
     }
 
     @Override

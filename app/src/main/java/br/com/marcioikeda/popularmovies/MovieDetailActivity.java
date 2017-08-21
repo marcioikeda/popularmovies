@@ -63,7 +63,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .into(moviePostImageView);
 
         TextView voteAverageTextView = (TextView) findViewById(R.id.tv_vote_average);
-        voteAverageTextView.setText(movie.getVote_average() + "/10");
+        voteAverageTextView.setText(getResources().getString(R.string.vote_average, movie.getVote_average()));
 
         TextView releaseYearTextView = (TextView) findViewById(R.id.tv_release_year);
         releaseYearTextView.setText(movie.getRelease_date().substring(0, 4));
@@ -72,7 +72,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         voteCountTextView.setText(movie.getVote_count());
 
         TextView originalTitleTextView = (TextView) findViewById(R.id.tv_original_title);
-        originalTitleTextView.setText(movie.getOriginal_title() + "\n(original title)");
+        originalTitleTextView.setText(getResources().getString(R.string.original_title, movie.getOriginal_title()));
 
         TextView overviewTextView = (TextView) findViewById(R.id.tv_overview);
         overviewTextView.setText(movie.getOverview());
