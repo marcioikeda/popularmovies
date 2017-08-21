@@ -21,7 +21,7 @@ public class MovieAPIUtil {
 
     public static final String MOVIE_PATH = "movie";
     public static final String POPULAR_PATH = "popular";
-    public static final String VIDEO_PATH = "video";
+    public static final String TOPRATED_PATH = "top_rated";
 
     public static final String IMG_SIZE_185 = "w185";
     public static final String IMG_SIZE_500 = "w500";
@@ -32,6 +32,22 @@ public class MovieAPIUtil {
                         .appendPath(POPULAR_PATH)
                         .appendQueryParameter(API_KEY_QUERY, PopMoviesApplication.API_KEY)
                         .build();
+        URL url = null;
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public static URL buildTopRatedMoviesURL() {
+        Uri uri = Uri.parse(BASE_URL).buildUpon()
+                .appendPath(MOVIE_PATH)
+                .appendPath(TOPRATED_PATH)
+                .appendQueryParameter(API_KEY_QUERY, PopMoviesApplication.API_KEY)
+                .build();
         URL url = null;
         try {
             url = new URL(uri.toString());

@@ -1,34 +1,21 @@
 package br.com.marcioikeda.popularmovies;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.URL;
-
 import br.com.marcioikeda.popularmovies.model.Movie;
-import br.com.marcioikeda.popularmovies.model.MovieDetail;
 import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
     public static final String KEY_EXTRA_MOVIE = "key_extra_movie";
-
-    private MovieDetail mMovieDetail;
-    private Movie mMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +24,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /* Will be used later
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +33,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        */
 
         //Adjust Height
         AppBarLayout appbar = (AppBarLayout) findViewById(R.id.app_bar);
@@ -89,49 +78,4 @@ public class MovieDetailActivity extends AppCompatActivity {
         overviewTextView.setText(movie.getOverview());
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(KEY_EXTRA_MOVIE, mMovie);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        Movie movie = savedInstanceState.getParcelable(KEY_EXTRA_MOVIE);
-        loadUIContent(movie);
-    }
-
-    public class GetMovieDetailTask extends AsyncTask<URL, Void, MovieDetail> {
-
-        @Override
-        protected MovieDetail doInBackground(URL... params) {
-            if (params.length == 0) {
-                return null;
-            }
-
-            URL url = params[0];
-            String jsonString = null;
-            try {
-                jsonString = MovieAPIUtil.getResponseFromHttpUrl(url);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-            if (jsonString != null) {
-                Gson gson = new Gson();
-                MovieDetail result = gson.fromJson(jsonString, MovieDetail.class);
-                return result;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(MovieDetail result) {
-            if (result != null) {
-                mMovieDetail = result;
-            } else {
-                Toast.makeText(MovieDetailActivity.this, "Error Fetching Movie Detail", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 }
