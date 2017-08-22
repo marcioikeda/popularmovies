@@ -1,6 +1,8 @@
 package br.com.marcioikeda.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -41,8 +43,13 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
 
         mAdapter = new MoviesAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
-
-        loadPopularMovies();
+        SharedPreferences sf = getPreferences(Context.MODE_PRIVATE);
+        String filterValue = sf.getString(getString(R.string.sf_filter_movies_key), getString(R.string.sf_filter_default));
+        if (filterValue.equalsIgnoreCase(getString(R.string.sf_filter_popular))) {
+            loadPopularMovies();
+        } else if (filterValue.equalsIgnoreCase(getString(R.string.sf_filter_toprated))) {
+            loadTopRatedMovies();
+        }
     }
 
     private int numberOfColumns() {
@@ -57,10 +64,18 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     }
 
     private void loadPopularMovies() {
+        SharedPreferences sf = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sf.edit();
+        editor.putString(getString(R.string.sf_filter_movies_key), getString(R.string.sf_filter_popular));
+        editor.commit();
         new GetMoviesTask(this).execute(MovieAPIUtil.buildPopularMoviesURL());
     }
 
     private void loadTopRatedMovies() {
+        SharedPreferences sf = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sf.edit();
+        editor.putString(getString(R.string.sf_filter_movies_key), getString(R.string.sf_filter_toprated));
+        editor.commit();
         new GetMoviesTask(this).execute(MovieAPIUtil.buildTopRatedMoviesURL());
     }
 

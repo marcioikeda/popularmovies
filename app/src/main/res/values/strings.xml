@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Popular Movies</string>
-    <string name="title_activity_movie_detail">MovieDetailActivity</string>
+    <string name="title_activity_movie_detail">Title</string>
     <!-- used for layouting purpouses -->
     <string name="large_text">
         "Material is the metaphor.\n\n"
@@ -25,4 +25,9 @@
     <string name="release_year_dummy">9999</string>
     <string name="vote_count_dummy">9999</string>
     <string name="error_network_getmovies">Error fetching movies</string>
+    <!-- Shared Preferences -->
+    <string name="sf_filter_movies_key">filter_movies</string>
+    <string name="sf_filter_default">popular</string>
+    <string name="sf_filter_popular">popular</string>
+    <string name="sf_filter_toprated">toprated</string>
 </resources>
