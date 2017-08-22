@@ -7,8 +7,8 @@ android {
         applicationId "br.com.marcioikeda.popularmovies"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 102
-        versionName "1.0.2"
+        versionCode 103
+        versionName "1.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         // Please ensure you have a valid API KEY for themoviedb.org to use this app
         // A valid key will need to be entered
