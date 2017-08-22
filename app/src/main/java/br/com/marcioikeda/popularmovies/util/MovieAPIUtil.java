@@ -9,6 +9,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+import br.com.marcioikeda.popularmovies.BuildConfig;
+
 /**
  * Created by marcio.ikeda on 18/08/2017.
  */
@@ -30,7 +32,7 @@ public class MovieAPIUtil {
         Uri uri = Uri.parse(BASE_URL).buildUpon()
                         .appendPath(MOVIE_PATH)
                         .appendPath(POPULAR_PATH)
-                        .appendQueryParameter(API_KEY_QUERY, PopMoviesApplication.API_KEY)
+                        .appendQueryParameter(API_KEY_QUERY, BuildConfig.API_KEY)
                         .build();
         URL url = null;
         try {
@@ -46,7 +48,7 @@ public class MovieAPIUtil {
         Uri uri = Uri.parse(BASE_URL).buildUpon()
                 .appendPath(MOVIE_PATH)
                 .appendPath(TOPRATED_PATH)
-                .appendQueryParameter(API_KEY_QUERY, PopMoviesApplication.API_KEY)
+                .appendQueryParameter(API_KEY_QUERY, BuildConfig.API_KEY)
                 .build();
         URL url = null;
         try {
