@@ -30,4 +30,6 @@
     <string name="sf_filter_default">popular</string>
     <string name="sf_filter_popular">popular</string>
     <string name="sf_filter_toprated">toprated</string>
+
+    <string name="transition_movie_post">moviepost</string>
 </resources>

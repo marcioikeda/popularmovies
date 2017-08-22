@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -105,13 +107,15 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     }
 
     @Override
-    public void onListItemClick(int position) {
+    public void onListItemClick(ImageView imageView, int position) {
         //Toast.makeText(this, String.valueOf(position) + " - " + mMovieData[position], Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, MovieDetailActivity.class);
         Bundle extras = new Bundle();
         extras.putParcelable(KEY_EXTRA_MOVIE, mMovieData[position]);
         intent.putExtras(extras);
-        startActivity(intent);
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, imageView, getString(R.string.transition_movie_post));
+        startActivity(intent, options.toBundle());
     }
 
     @Override

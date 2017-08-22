@@ -22,7 +22,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     private Movie[] mMoviesData;
 
     public interface ListItemClickListener {
-        void onListItemClick(int position);
+        void onListItemClick(ImageView imageView, int position);
     }
 
     public MoviesAdapter(ListItemClickListener listener) {
@@ -71,7 +71,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         @Override
         public void onClick(View v) {
-            mOnClickListener.onListItemClick(getAdapterPosition());
+            mOnClickListener.onListItemClick(movieView, getAdapterPosition());
         }
     }
 }
