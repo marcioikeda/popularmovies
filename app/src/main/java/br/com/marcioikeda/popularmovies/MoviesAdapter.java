@@ -48,6 +48,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public void onBindViewHolder(MovieViewHolder holder, int position) {
         Picasso.with(holder.movieView.getContext())
                 .load(MovieAPIUtil.buildImageUri(mMoviesData[position].getPoster_path().substring(1), MovieAPIUtil.IMG_SIZE_185))
+                .placeholder(R.mipmap.ic_launcher)
+                .error(android.R.drawable.ic_menu_close_clear_cancel)
                 .into(holder.movieView);
     }
 

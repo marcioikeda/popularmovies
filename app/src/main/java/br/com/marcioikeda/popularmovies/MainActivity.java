@@ -1,22 +1,17 @@
 package br.com.marcioikeda.popularmovies;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.net.URL;
 
 import br.com.marcioikeda.popularmovies.model.Movie;
 import br.com.marcioikeda.popularmovies.model.MovieList;
@@ -25,7 +20,7 @@ import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
 import static android.view.View.GONE;
 import static br.com.marcioikeda.popularmovies.MovieDetailActivity.KEY_EXTRA_MOVIE;
 
-public class MainActivity extends AppCompatActivity implements MoviesAdapter.ListItemClickListener{
+public class MainActivity extends AppCompatActivity implements MoviesAdapter.ListItemClickListener, IAsyncTaskListener<MovieList>{
 
     private RecyclerView mRecyclerView;
     private MoviesAdapter mAdapter;
@@ -40,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_movies_list);
         mProgressBar = (ProgressBar) findViewById(R.id.pb_progress_bar);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
@@ -50,12 +45,23 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         loadPopularMovies();
     }
 
+    private int numberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        // You can change this divider to adjust the size of the poster
+        int widthDivider = 600;
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / widthDivider;
+        if (nColumns < 2) return 2;
+        return nColumns;
+    }
+
     private void loadPopularMovies() {
-        new GetMoviesTask().execute(MovieAPIUtil.buildPopularMoviesURL());
+        new GetMoviesTask(this).execute(MovieAPIUtil.buildPopularMoviesURL());
     }
 
     private void loadTopRatedMovies() {
-        new GetMoviesTask().execute(MovieAPIUtil.buildTopRatedMoviesURL());
+        new GetMoviesTask(this).execute(MovieAPIUtil.buildTopRatedMoviesURL());
     }
 
     private void loadMoviesIntoUI(MovieList list) {
@@ -93,45 +99,21 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         startActivity(intent);
     }
 
-    private class GetMoviesTask extends AsyncTask<URL, Void, MovieList> {
+    @Override
+    public void onPreExecute() {
+        mRecyclerView.setVisibility(GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
 
-        @Override
-        protected void onPreExecute() {
-            mRecyclerView.setVisibility(GONE);
-            mProgressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected MovieList doInBackground(URL... params) {
-            if (params.length == 0) {
-                return null;
-            }
-
-            URL url = params[0];
-            String jsonString;
-            try {
-                jsonString = MovieAPIUtil.getResponseFromHttpUrl(url);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-            if (jsonString != null) {
-                Gson gson = new Gson();
-                return gson.fromJson(jsonString, MovieList.class);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(MovieList list) {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(GONE);
-            if (list != null) {
-                loadMoviesIntoUI(list);
-            } else {
-                Toast.makeText(MainActivity.this, "Error fetching movies", Toast.LENGTH_LONG).show();
-            }
+    @Override
+    public void onComplete(MovieList result) {
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(GONE);
+        if (result != null) {
+            loadMoviesIntoUI(result);
+        } else {
+            Toast.makeText(MainActivity.this, getResources().getString(R.string.error_network_getmovies),
+                    Toast.LENGTH_LONG).show();
         }
     }
 }

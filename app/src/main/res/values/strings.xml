@@ -24,4 +24,5 @@
     <string name="original_title">%1$s\n(original title)</string>
     <string name="release_year_dummy">9999</string>
     <string name="vote_count_dummy">9999</string>
+    <string name="error_network_getmovies">Error fetching movies</string>
 </resources>
