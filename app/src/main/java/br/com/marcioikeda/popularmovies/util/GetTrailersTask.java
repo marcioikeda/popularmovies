@@ -1,4 +1,4 @@
-package br.com.marcioikeda.popularmovies;
+package br.com.marcioikeda.popularmovies.util;
 
 import android.os.AsyncTask;
 
@@ -7,18 +7,17 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.URL;
 
-import br.com.marcioikeda.popularmovies.model.MovieList;
-import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
+import br.com.marcioikeda.popularmovies.model.TrailerList;
 
 /**
- * Created by marcio.ikeda on 22/08/2017.
+ * Created by marcio.ikeda on 23/10/2017.
  */
 
-public class GetMoviesTask extends AsyncTask<URL, Void, MovieList> {
+public class GetTrailersTask extends AsyncTask<URL, Void, TrailerList> {
 
-    IAsyncTaskListener<MovieList> mListener;
+    IAsyncTaskListener<TrailerList> mListener;
 
-    public GetMoviesTask(IAsyncTaskListener<MovieList> listener) {
+    public GetTrailersTask(IAsyncTaskListener<TrailerList> listener) {
         mListener = listener;
     }
 
@@ -28,7 +27,7 @@ public class GetMoviesTask extends AsyncTask<URL, Void, MovieList> {
     }
 
     @Override
-    protected MovieList doInBackground(URL... params) {
+    protected TrailerList doInBackground(URL... params) {
         if (params.length == 0) {
             return null;
         }
@@ -44,13 +43,13 @@ public class GetMoviesTask extends AsyncTask<URL, Void, MovieList> {
 
         if (jsonString != null) {
             Gson gson = new Gson();
-            return gson.fromJson(jsonString, MovieList.class);
+            return gson.fromJson(jsonString, TrailerList.class);
         }
         return null;
     }
 
     @Override
-    protected void onPostExecute(MovieList list) {
+    protected void onPostExecute(TrailerList list) {
         mListener.onComplete(list);
     }
 }

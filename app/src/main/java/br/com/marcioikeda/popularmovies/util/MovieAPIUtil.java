@@ -24,6 +24,8 @@ public class MovieAPIUtil {
     private static final String MOVIE_PATH = "movie";
     private static final String POPULAR_PATH = "popular";
     private static final String TOPRATED_PATH = "top_rated";
+    private static final String VIDEO_PATH = "videos";
+    private static final String REVIEW_PATH = "reviews";
 
     public static final String IMG_SIZE_185 = "w185";
     public static final String IMG_SIZE_500 = "w500";
@@ -66,6 +68,23 @@ public class MovieAPIUtil {
                         .appendPath(imagePath)
                         .build();
     }
+
+    public static Uri buildTrailerUri(String id) {
+        return Uri.parse(BASE_URL).buildUpon()
+                .appendPath(MOVIE_PATH)
+                .appendPath(id)
+                .appendPath(VIDEO_PATH)
+                .build();
+    }
+
+    public static Uri buildReviewUri(String id) {
+        return Uri.parse(BASE_URL).buildUpon()
+                .appendPath(MOVIE_PATH)
+                .appendPath(id)
+                .appendPath(REVIEW_PATH)
+                .build();
+    }
+
 
     /**
      * This method returns the entire result from the HTTP response.

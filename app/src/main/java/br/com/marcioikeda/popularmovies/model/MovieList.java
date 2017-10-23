@@ -57,6 +57,6 @@ public class MovieList
     @Override
     public String toString()
     {
-        return "ClassPojo [results = "+results+", page = "+page+", total_pages = "+total_pages+", total_results = "+total_results+"]";
+        return "MovieList [results = "+results+", page = "+page+", total_pages = "+total_pages+", total_results = "+total_results+"]";
     }
 }

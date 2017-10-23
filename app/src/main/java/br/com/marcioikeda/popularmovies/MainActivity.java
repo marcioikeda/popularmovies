@@ -19,12 +19,14 @@ import android.widget.Toast;
 
 import br.com.marcioikeda.popularmovies.model.Movie;
 import br.com.marcioikeda.popularmovies.model.MovieList;
+import br.com.marcioikeda.popularmovies.util.GetMoviesTask;
+import br.com.marcioikeda.popularmovies.util.IAsyncTaskListener;
 import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
 
 import static android.view.View.GONE;
 import static br.com.marcioikeda.popularmovies.MovieDetailActivity.KEY_EXTRA_MOVIE;
 
-public class MainActivity extends AppCompatActivity implements MoviesAdapter.ListItemClickListener, IAsyncTaskListener<MovieList>{
+public class MainActivity extends AppCompatActivity implements MoviesAdapter.ListItemClickListener, IAsyncTaskListener<MovieList> {
 
     private RecyclerView mRecyclerView;
     private MoviesAdapter mAdapter;

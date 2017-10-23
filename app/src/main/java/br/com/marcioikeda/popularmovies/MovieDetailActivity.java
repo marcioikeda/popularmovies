@@ -47,6 +47,13 @@ public class MovieDetailActivity extends AppCompatActivity {
         if (movie != null) {
             loadUIContent(movie);
         }
+
+        //Get Trailers from bundle or request to network
+        if (savedInstanceState != null) {
+
+        } else {
+
+        }
     }
 
     private void loadUIContent(Movie movie) {

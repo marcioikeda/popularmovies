@@ -1,4 +1,4 @@
-package br.com.marcioikeda.popularmovies;
+package br.com.marcioikeda.popularmovies.util;
 
 /**
  * Created by marcio.ikeda on 22/08/2017.
