@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,19 +21,21 @@ import android.widget.Toast;
 
 import br.com.marcioikeda.popularmovies.model.Movie;
 import br.com.marcioikeda.popularmovies.model.MovieList;
-import br.com.marcioikeda.popularmovies.util.GetMoviesTask;
-import br.com.marcioikeda.popularmovies.util.IAsyncTaskListener;
+import br.com.marcioikeda.popularmovies.util.GetMoviesLoader;
 import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
 
 import static android.view.View.GONE;
 import static br.com.marcioikeda.popularmovies.MovieDetailActivity.KEY_EXTRA_MOVIE;
 
-public class MainActivity extends AppCompatActivity implements MoviesAdapter.ListItemClickListener, IAsyncTaskListener<MovieList> {
+public class MainActivity extends AppCompatActivity implements MoviesAdapter.ListItemClickListener, LoaderManager.LoaderCallbacks<MovieList>{
 
     private RecyclerView mRecyclerView;
     private MoviesAdapter mAdapter;
     private ProgressBar mProgressBar;
     private Movie[] mMovieData;
+
+    private static int POPULAR_LOADER_ID = 1;
+    private static int TOPRATED_LOADER_ID = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +54,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         SharedPreferences sf = getPreferences(Context.MODE_PRIVATE);
         String filterValue = sf.getString(getString(R.string.sf_filter_movies_key), getString(R.string.sf_filter_default));
         if (filterValue.equalsIgnoreCase(getString(R.string.sf_filter_popular))) {
-            loadPopularMovies();
+            loadPopularMovies(false);
         } else if (filterValue.equalsIgnoreCase(getString(R.string.sf_filter_toprated))) {
-            loadTopRatedMovies();
+            loadTopRatedMovies(false);
         }
     }
 
@@ -67,20 +71,32 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
         return nColumns;
     }
 
-    private void loadPopularMovies() {
+    private void loadPopularMovies(boolean forceReload) {
         SharedPreferences sf = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sf.edit();
         editor.putString(getString(R.string.sf_filter_movies_key), getString(R.string.sf_filter_popular));
         editor.commit();
-        new GetMoviesTask(this).execute(MovieAPIUtil.buildPopularMoviesURL());
+        mRecyclerView.setVisibility(GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        if (forceReload) {
+            getSupportLoaderManager().restartLoader(POPULAR_LOADER_ID, null, this);
+        } else {
+            getSupportLoaderManager().initLoader(POPULAR_LOADER_ID, null, this);
+        }
     }
 
-    private void loadTopRatedMovies() {
+    private void loadTopRatedMovies(boolean forceReload) {
         SharedPreferences sf = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sf.edit();
         editor.putString(getString(R.string.sf_filter_movies_key), getString(R.string.sf_filter_toprated));
         editor.commit();
-        new GetMoviesTask(this).execute(MovieAPIUtil.buildTopRatedMoviesURL());
+        mRecyclerView.setVisibility(GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        if (forceReload) {
+            getSupportLoaderManager().restartLoader(TOPRATED_LOADER_ID, null, this);
+        } else {
+            getSupportLoaderManager().initLoader(TOPRATED_LOADER_ID, null, this);
+        }
     }
 
     private void loadMoviesIntoUI(MovieList list) {
@@ -99,10 +115,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_popular) {
-            loadPopularMovies();
+            loadPopularMovies(true);
             return true;
         } else if (item.getItemId() == R.id.action_toprated) {
-            loadTopRatedMovies();
+            loadTopRatedMovies(true);
             return true;
         }
         return false;
@@ -121,20 +137,29 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     }
 
     @Override
-    public void onPreExecute() {
-        mRecyclerView.setVisibility(GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+    public Loader<MovieList> onCreateLoader(int id, Bundle args) {
+        if (id == POPULAR_LOADER_ID) {
+            return new GetMoviesLoader(this, MovieAPIUtil.buildPopularMoviesURL());
+        } else if (id == TOPRATED_LOADER_ID) {
+            return new GetMoviesLoader(this, MovieAPIUtil.buildTopRatedMoviesURL());
+        }
+        return null;
     }
 
     @Override
-    public void onComplete(MovieList result) {
+    public void onLoadFinished(Loader<MovieList> loader, MovieList data) {
         mRecyclerView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(GONE);
-        if (result != null) {
-            loadMoviesIntoUI(result);
+        if (data != null) {
+            loadMoviesIntoUI(data);
         } else {
             Toast.makeText(MainActivity.this, getResources().getString(R.string.error_network_getmovies),
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<MovieList> loader) {
+        mAdapter.setMoviesData(null);
     }
 }
