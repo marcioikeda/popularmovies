@@ -43,7 +43,15 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_content_movie_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <!--
     <include layout="@layout/content_movie_detail" />
+    -->
 
     <!-- Will be used later
     <android.support.design.widget.FloatingActionButton

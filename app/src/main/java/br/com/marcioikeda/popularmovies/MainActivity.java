@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Lis
     private ProgressBar mProgressBar;
     private Movie[] mMovieData;
 
-    private static int POPULAR_LOADER_ID = 1;
-    private static int TOPRATED_LOADER_ID = 2;
+    private static final int POPULAR_LOADER_ID = 1;
+    private static final int TOPRATED_LOADER_ID = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -69,20 +69,38 @@ public class MovieAPIUtil {
                         .build();
     }
 
-    public static Uri buildTrailerUri(String id) {
-        return Uri.parse(BASE_URL).buildUpon()
-                .appendPath(MOVIE_PATH)
-                .appendPath(id)
-                .appendPath(VIDEO_PATH)
-                .build();
+    public static URL buildTrailerURL(String id) {
+        Uri uri =  Uri.parse(BASE_URL).buildUpon()
+                    .appendPath(MOVIE_PATH)
+                    .appendPath(id)
+                    .appendPath(VIDEO_PATH)
+                    .appendQueryParameter(API_KEY_QUERY, BuildConfig.API_KEY)
+                    .build();
+        URL url = null;
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
     }
 
-    public static Uri buildReviewUri(String id) {
-        return Uri.parse(BASE_URL).buildUpon()
-                .appendPath(MOVIE_PATH)
-                .appendPath(id)
-                .appendPath(REVIEW_PATH)
-                .build();
+    public static URL buildReviewURL(String id) {
+        Uri uri = Uri.parse(BASE_URL).buildUpon()
+                    .appendPath(MOVIE_PATH)
+                    .appendPath(id)
+                    .appendPath(REVIEW_PATH)
+                    .appendQueryParameter(API_KEY_QUERY, BuildConfig.API_KEY)
+                    .build();
+        URL url = null;
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
     }
 
 

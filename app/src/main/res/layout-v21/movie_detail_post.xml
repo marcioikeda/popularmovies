@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/iv_movie_detail_post"
+    android:layout_width="@dimen/movie_post_width"
+    android:layout_height="@dimen/movie_post_height"
+    android:adjustViewBounds="true"
+    android:scaleType="fitCenter"
+    android:src="@mipmap/ic_launcher"
+    android:contentDescription="@string/content_movie_post"
+    android:transitionName="@string/transition_movie_post">
+
+</ImageView>
