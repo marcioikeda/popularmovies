@@ -1,5 +1,7 @@
 package br.com.marcioikeda.popularmovies;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +12,11 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import br.com.marcioikeda.popularmovies.model.Movie;
+import br.com.marcioikeda.popularmovies.model.TrailerList;
 import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
+import br.com.marcioikeda.popularmovies.util.Util;
+
+import static android.R.attr.id;
 
 /**
  * Created by marcio.ikeda on 14/11/2017.
@@ -19,20 +25,23 @@ import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
 public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Movie mMovieData;
-    private String mTrailerData;
+    private TrailerList mTrailerData;
 
     public void setMovieData(Movie data) {
         mMovieData = data;
         notifyDataSetChanged();
     }
 
-    public void setTrailerData(String json) {
-        mTrailerData = json;
+    public void setTrailerData(TrailerList list) {
+        mTrailerData = list;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemViewType(int position) {
+        if (position > 1) {
+            return 2;
+        }
         return position;
     }
 
@@ -49,6 +58,10 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case 1:
                 View v2 = inflater.inflate(R.layout.content_movie_detail_text, parent, false);
                 viewHolder = new MovieTextViewHolder(v2);
+                break;
+            case 2:
+                View v3 = inflater.inflate(R.layout.content_movie_detail_trailer, parent, false);
+                viewHolder = new TrailerViewHolder(v3);
                 break;
             default:
                 viewHolder = null;
@@ -73,13 +86,24 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 break;
             case 1:
                 MovieTextViewHolder viewHolder1 = (MovieTextViewHolder) holder;
-                viewHolder1.textView.setText(mTrailerData);
+                if (mTrailerData != null) {
+                    viewHolder1.textView.setText(mTrailerData.toString());
+                }
+                break;
+            case 2:
+                TrailerViewHolder viewHolder2 = (TrailerViewHolder) holder;
+                if (mTrailerData != null && mTrailerData.getResults() != null) {
+                    viewHolder2.textView.setText(mTrailerData.getResults().get(position - 2).getName());
+                }
                 break;
         }
     }
 
     @Override
     public int getItemCount() {
+        if (mTrailerData != null && mTrailerData.getResults() != null && mTrailerData.getResults().size() > 0 ) {
+            return 2 + mTrailerData.getResults().size();
+        }
         return 2;
     }
 
@@ -113,5 +137,21 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
+    class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        TextView textView;
+
+        public TrailerViewHolder(View itemView) {
+            super(itemView);
+            textView = (TextView) itemView.findViewById(R.id.tv_trailer_title);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mTrailerData.getResults().get(getAdapterPosition()).getSite().equalsIgnoreCase("Youtube")) {
+                Util.watchYoutubeVideo(v.getContext(), mTrailerData.getResults().get(getAdapterPosition() - 2).getKey());
+            }
+        }
+    }
 
 }

@@ -104,7 +104,7 @@ public class MovieDetailActivity extends AppCompatActivity implements LoaderMana
     }
 
     private void loadTrailers(TrailerList list) {
-        ((MovieDetailAdapter) mRecyclerView.getAdapter()).setTrailerData(list.toString());
+        ((MovieDetailAdapter) mRecyclerView.getAdapter()).setTrailerData(list);
     }
 
     @Override
