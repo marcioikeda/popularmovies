@@ -8,18 +8,23 @@
     </string>
     <string name="action_popular">Popular</string>
     <string name="action_toprated">Top Rated</string>
+    <string name="action_favorites">Favorites</string>
     <string name="content_movie_appbar">Movie App Bar Image</string>
     <string name="content_movie_post">Movie Poster Image</string>
     <string name="vote_average">%1$s/10</string>
     <string name="original_title">%1$s\n(original title)</string>
     <string name="release_year_dummy">9999</string>
     <string name="vote_count_dummy">9999</string>
+    <!-- Messages -->
+    <string name="favorites_add">Movie added to favorites.</string>
+    <string name="favorites_remove">Movie removed from favorites.</string>
     <string name="error_network_getmovies">Error fetching movies</string>
     <!-- Shared Preferences -->
     <string name="sf_filter_movies_key">filter_movies</string>
     <string name="sf_filter_default">popular</string>
     <string name="sf_filter_popular">popular</string>
     <string name="sf_filter_toprated">toprated</string>
+    <string name="sf_filter_favorites">favorites</string>
 
     <string name="transition_movie_post">moviepost</string>
 </resources>

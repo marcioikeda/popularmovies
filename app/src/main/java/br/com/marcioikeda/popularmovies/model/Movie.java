@@ -182,6 +182,9 @@ public class Movie implements Parcelable{
         return "Movie [vote_average = "+vote_average+", backdrop_path = "+backdrop_path+", adult = "+adult+", id = "+id+", title = "+title+", overview = "+overview+", original_language = "+original_language+", genre_ids = "+genre_ids+", release_date = "+release_date+", original_title = "+original_title+", vote_count = "+vote_count+", poster_path = "+poster_path+", video = "+video+", popularity = "+popularity+"]";
     }
 
+    public Movie() {
+    }
+
     protected Movie(Parcel in) {
         vote_average = in.readString();
         backdrop_path = in.readString();

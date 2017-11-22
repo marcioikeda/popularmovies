@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import br.com.marcioikeda.popularmovies.data.MovieDbUtil;
 import br.com.marcioikeda.popularmovies.model.Movie;
 import br.com.marcioikeda.popularmovies.model.ReviewList;
 import br.com.marcioikeda.popularmovies.model.TrailerList;
@@ -37,6 +38,8 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
 
+    Movie mMovie;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +52,15 @@ public class MovieDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (MovieDbUtil.isFavorite(MovieDetailActivity.this, mMovie.getId())) {
+                    MovieDbUtil.deleteFavorite(MovieDetailActivity.this, mMovie.getId());
+                    Snackbar.make(view, getString(R.string.favorites_remove), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    MovieDbUtil.insertFavorite(MovieDetailActivity.this, mMovie);
+                    Snackbar.make(view, getString(R.string.favorites_add), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
 
@@ -68,11 +78,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         appbar.setLayoutParams(lp);
 
         //Get Movie from intent
-        Movie movie = getIntent().getExtras().getParcelable(KEY_EXTRA_MOVIE);
-        if (movie != null) {
-            loadUIContent(movie);
+        mMovie = getIntent().getExtras().getParcelable(KEY_EXTRA_MOVIE);
+        if (mMovie != null) {
+            loadUIContent(mMovie);
             Bundle args = new Bundle();
-            args.putString(KEY_MOVIE_ID, movie.getId());
+            args.putString(KEY_MOVIE_ID, mMovie.getId());
             getSupportLoaderManager().initLoader(TRAILER_LOADER_ID, args, trailerLoaderListener);
             getSupportLoaderManager().initLoader(REVIEW_LOADER_ID, args, reviewLoaderListener);
         }
