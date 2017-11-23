@@ -27,6 +27,7 @@ import br.com.marcioikeda.popularmovies.util.GetTrailersLoader;
 import br.com.marcioikeda.popularmovies.util.MovieAPIUtil;
 
 import static android.R.attr.data;
+import static br.com.marcioikeda.popularmovies.R.id.fab;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
@@ -40,6 +41,8 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     Movie mMovie;
 
+    private FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +51,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,10 +59,12 @@ public class MovieDetailActivity extends AppCompatActivity {
                     MovieDbUtil.deleteFavorite(MovieDetailActivity.this, mMovie.getId());
                     Snackbar.make(view, getString(R.string.favorites_remove), Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
+                    fab.setActivated(false);
                 } else {
                     MovieDbUtil.insertFavorite(MovieDetailActivity.this, mMovie);
                     Snackbar.make(view, getString(R.string.favorites_add), Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
+                    fab.setActivated(true);
                 }
             }
         });
@@ -67,7 +72,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_content_movie_detail);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
-        MovieDetailAdapter adapter = new MovieDetailAdapter();
+        MovieDetailAdapter adapter = new MovieDetailAdapter(this);
         mRecyclerView.setAdapter(adapter);
 
         //Adjust Height
@@ -85,6 +90,7 @@ public class MovieDetailActivity extends AppCompatActivity {
             args.putString(KEY_MOVIE_ID, mMovie.getId());
             getSupportLoaderManager().initLoader(TRAILER_LOADER_ID, args, trailerLoaderListener);
             getSupportLoaderManager().initLoader(REVIEW_LOADER_ID, args, reviewLoaderListener);
+            fab.setActivated(MovieDbUtil.isFavorite(MovieDetailActivity.this, mMovie.getId()));
         }
 
     }

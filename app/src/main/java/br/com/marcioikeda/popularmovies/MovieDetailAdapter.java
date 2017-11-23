@@ -1,5 +1,6 @@
 package br.com.marcioikeda.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -44,6 +45,12 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<ViewHolder> {
     private final int REVIEW = 2;
     private final int TITLE = 3;
 
+    private Context mContext;
+
+    public MovieDetailAdapter(Context context) {
+        mContext = context;
+    }
+
     public void setMovieData(Movie data) {
         mMovieData = data;
         syncItems();
@@ -65,9 +72,11 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<ViewHolder> {
             items.add(mMovieData);
         }
         if (mTrailerData != null && mTrailerData.getResults() != null && mTrailerData.getResults().size() > 0) {
+            items.add(mContext.getString(R.string.title_trailer));
             items.addAll(mTrailerData.getResults());
         }
         if (mReviewData != null && mReviewData.getResults() != null && mReviewData.getResults().size() > 0) {
+            items.add(mContext.getString(R.string.title_review));
             items.addAll(mReviewData.getResults());
         }
         Log.d(TAG, "syncItems");
@@ -82,6 +91,8 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<ViewHolder> {
             return TRAILER;
         } else if (items.get(position) instanceof Review) {
             return REVIEW;
+        } else if (items.get(position) instanceof String) {
+            return TITLE;
         }
         return -1;
     }
@@ -132,17 +143,15 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<ViewHolder> {
                 Picasso.with(viewHolder0.moviePostImageView.getContext()).load(MovieAPIUtil
                         .buildImageUri(mMovieData.getPoster_path().substring(1), MovieAPIUtil.IMG_SIZE_185))
                         .into(viewHolder0.moviePostImageView);
-                viewHolder0.voteAverageTextView.setText(viewHolder0.voteAverageTextView.getContext().getResources().getString(R.string.vote_average, mMovieData.getVote_average()));
+                viewHolder0.voteAverageTextView.setText(mContext.getString(R.string.vote_average, mMovieData.getVote_average()));
                 viewHolder0.releaseYearTextView.setText(mMovieData.getRelease_date().substring(0, 4));
-                viewHolder0.voteCountTextView.setText(mMovieData.getVote_count());
+                viewHolder0.voteCountTextView.setText(mContext.getString(R.string.vote_count, mMovieData.getVote_count()));
                 viewHolder0.originalTitleTextView.setText(viewHolder0.originalTitleTextView.getContext().getResources().getString(R.string.original_title, mMovieData.getOriginal_title()));
                 viewHolder0.overviewTextView.setText(mMovieData.getOverview());
                 break;
             case TITLE:
                 MovieTextViewHolder viewHolder1 = (MovieTextViewHolder) holder;
-                if (mTrailerData != null) {
-                    viewHolder1.textView.setText(mTrailerData.toString());
-                }
+                viewHolder1.textView.setText((String) items.get(position));
                 break;
             case TRAILER:
                 TrailerViewHolder viewHolder2 = (TrailerViewHolder) holder;
@@ -152,7 +161,7 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<ViewHolder> {
             case REVIEW:
                 ReviewViewHolder viewHolder3 = (ReviewViewHolder) holder;
                 String author = ((Review) items.get(position)).getAuthor();
-                viewHolder3.authorTextView.setText(author);
+                viewHolder3.authorTextView.setText(mContext.getString(R.string.author, author));
                 String content = ((Review) items.get(position)).getContent();
                 viewHolder3.contentTextView.setText(content);
                 break;
@@ -190,7 +199,7 @@ public class MovieDetailAdapter extends RecyclerView.Adapter<ViewHolder> {
 
         public MovieTextViewHolder(View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.tv_trailer_json);
+            textView = (TextView) itemView.findViewById(R.id.tv_movie_detail_title);
         }
     }
 

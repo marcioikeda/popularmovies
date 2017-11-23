@@ -11,10 +11,13 @@
     <string name="action_favorites">Favorites</string>
     <string name="content_movie_appbar">Movie App Bar Image</string>
     <string name="content_movie_post">Movie Poster Image</string>
-    <string name="vote_average">%1$s/10</string>
+    <string name="vote_average">Rating: %1$s/10</string>
     <string name="original_title">%1$s\n(original title)</string>
     <string name="release_year_dummy">9999</string>
-    <string name="vote_count_dummy">9999</string>
+    <string name="vote_count">Votes: %1$s</string>
+    <string name="author">author: %1$s</string>
+    <string name="title_trailer">Trailers</string>
+    <string name="title_review">Reviews</string>
     <!-- Messages -->
     <string name="favorites_add">Movie added to favorites.</string>
     <string name="favorites_remove">Movie removed from favorites.</string>

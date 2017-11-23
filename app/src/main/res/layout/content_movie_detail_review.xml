@@ -7,11 +7,22 @@
     <TextView
         android:id="@+id/tv_review_author"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:textSize="18sp"
+        android:text="Author bananao"/>
 
     <TextView
         android:id="@+id/tv_review_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Esse eh meu review blablablabla"/>
+
+    <View
+        android:layout_margin="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/background_dark" />
     
 </LinearLayout>
